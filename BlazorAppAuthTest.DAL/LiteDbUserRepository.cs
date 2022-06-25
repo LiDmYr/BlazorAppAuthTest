@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlazorAppAuthTest.DAL
 {
     //TODO Fix async methods without async code inside
-    public class UsersRepository : IDisposable, IUserRepository
+    public class LiteDbUserRepository : IDisposable, IUserRepository
     {
         private readonly ILiteDbRepository _dbRepo;
 
-        public UsersRepository(ILiteDbRepository dbRepo)
+        public LiteDbUserRepository(ILiteDbRepository dbRepo)
         {
             _dbRepo = dbRepo;
         }

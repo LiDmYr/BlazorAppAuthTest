@@ -32,6 +32,7 @@ namespace BlazorAppAuthTest.CustomAuntAuth
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (userId == null) throw new ArgumentNullException(nameof(userId));
+            //TODO Parse if not string
             //if (!Guid.TryParse(userId, out string idGuid))
             //{
             //    throw new ArgumentException("Not a valid Guid id", nameof(userId));
