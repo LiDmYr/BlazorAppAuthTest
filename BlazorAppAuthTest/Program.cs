@@ -1,4 +1,6 @@
 using BlazorAppAuthTest.Areas.Identity;
+using BlazorAppAuthTest.CustomAuntAuth;
+using BlazorAppAuthTest.DAL;
 using BlazorAppAuthTest.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -7,20 +9,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+//AddIdentity
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .Add
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddUserStore<LiteDbUserStore>();
+//.AddRoleStore<LiteDbRoleStore>();
+//.AddDefaultTokenProviders();
+
+//builder.Services.AddTransient<IUserStore<IdentityUser>, LiteDbUserStore>();
+builder.Services.AddTransient<IRoleStore<IdentityRole>, LiteDbRoleStore>();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddSingleton<IUserRepository, UsersRepository>();
+builder.Services.AddSingleton<ILiteDbRepository, LiteDbRepository>();
 
 var app = builder.Build();
 
