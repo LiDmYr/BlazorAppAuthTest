@@ -12,6 +12,7 @@ namespace BlazorAppAuthTest.DAL
 
         public LiteDbRepository()
         {
+            //TODO read file path from config as IOption<....>
             var conString = @"D:\workspaces\BlazorAppAuthTest\Db\liteStorage.db";
             _db = new LiteDatabase(conString);
 
