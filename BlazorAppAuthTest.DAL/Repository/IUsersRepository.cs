@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace BlazorAppAuthTest.DAL
+namespace BlazorAppAuthTest.DAL.Repository
 {
     public interface IUserRepository
     {

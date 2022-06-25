@@ -1,15 +1,49 @@
-﻿using BlazorAppAuthTest.DAL;
+﻿using BlazorAppAuthTest.DAL.Repository;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BlazorAppAuthTest.CustomAuntAuth
 {
-    public class LiteDbUserStore : IUserStore<IdentityUser>, IUserEmailStore<IdentityUser>, IUserPasswordStore<IdentityUser>
+    public partial class LiteDbUserStore : IUserClaimStore<IdentityUser> // needed to provide base for roles. can be used for policies also
     {
-        private readonly IUserRepository _usersRepository;
-
-        public LiteDbUserStore(IUserRepository usersRepository)
+        public async Task<IList<Claim>> GetClaimsAsync(IdentityUser user, CancellationToken cancellationToken)
         {
-            _usersRepository = usersRepository;
+            return new List<Claim>(); // we do not use claims, but it's called during identifying roles
+        }
+
+        public Task AddClaimsAsync(IdentityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ReplaceClaimAsync(IdentityUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveClaimsAsync(IdentityUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<IdentityUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public partial class LiteDbUserStore :
+        IUserRoleStore<IdentityUser>, // needed to match roles and users
+        IUserEmailStore<IdentityUser>, // needed to build auntefication on emails
+        IUserPasswordStore<IdentityUser> // needed to use passwords
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+
+        public LiteDbUserStore(IUserRepository userRepository, IRoleRepository roleRepository)
+        {
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<IdentityResult> CreateAsync(IdentityUser user, CancellationToken cancellationToken)
@@ -17,7 +51,7 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
 
-            return await _usersRepository.CreateAsync(user);
+            return await _userRepository.CreateAsync(user);
         }
 
         public async Task<IdentityResult> DeleteAsync(IdentityUser user, CancellationToken cancellationToken)
@@ -25,7 +59,7 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null) throw new ArgumentNullException(nameof(user));
 
-            return await _usersRepository.DeleteAsync(user);
+            return await _userRepository.DeleteAsync(user);
         }
 
         public async Task<IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
@@ -38,7 +72,7 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             //    throw new ArgumentException("Not a valid Guid id", nameof(userId));
             //}
 
-            return await _usersRepository.FindByIdAsync(userId);
+            return await _userRepository.FindByIdAsync(userId);
         }
 
         public async Task<IdentityUser> FindByNameAsync(string userName, CancellationToken cancellationToken)
@@ -46,7 +80,7 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             cancellationToken.ThrowIfCancellationRequested();
             if (userName == null) throw new ArgumentNullException(nameof(userName));
 
-            return await _usersRepository.FindByNameAsync(userName);
+            return await _userRepository.FindByNameAsync(userName);
         }
 
         public async Task<string> GetNormalizedUserNameAsync(IdentityUser user, CancellationToken cancellationToken)
@@ -144,7 +178,7 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             //    throw new ArgumentException("Not a valid Guid id", nameof(userId));
             //}
 
-            return await _usersRepository.FindByEmailAsync(email);
+            return await _userRepository.FindByEmailAsync(email);
         }
 
         public async Task<string> GetNormalizedEmailAsync(IdentityUser user, CancellationToken cancellationToken)
@@ -187,6 +221,49 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             if (user == null) throw new ArgumentNullException(nameof(user));
 
             return !string.IsNullOrWhiteSpace(user.PasswordHash);
+        }
+
+        public Task AddToRoleAsync(IdentityUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveFromRoleAsync(IdentityUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IList<string>> GetRolesAsync(IdentityUser user, CancellationToken cancellationToken)
+        {
+            const string superUserName = "liashkod@gmail.com";
+
+            if (user.UserName == superUserName)
+            {
+                //TODO kind of initialization
+                IdentityRole[] superAdminRoles = await _roleRepository.GetRolesAsync(user);
+                if (superAdminRoles.Length == 0)
+                {
+                    await _roleRepository.AddSuperAdmin(user);
+                }
+                else
+                {
+                    //TODO confusing flow - review initialization in general.
+                    return superAdminRoles.Select(r => r.Name).ToArray();
+                }
+            }
+
+            IdentityRole[] roles = await _roleRepository.GetRolesAsync(user);
+            return roles.Select(r => r.Name).ToArray();
+        }
+
+        public Task<bool> IsInRoleAsync(IdentityUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<IdentityUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

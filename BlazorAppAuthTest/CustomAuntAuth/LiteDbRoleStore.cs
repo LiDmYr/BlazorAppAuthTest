@@ -14,11 +14,6 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             throw new NotImplementedException();
         }
 
-        public void Dispose()
-        {
-            //TODO
-        }
-
         public Task<IdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -59,6 +54,9 @@ namespace BlazorAppAuthTest.CustomAuntAuth
             throw new NotImplementedException();
         }
 
-        //TODO implement disposable
+        public void Dispose()
+        {
+            //TODO
+        }
     }
 }
