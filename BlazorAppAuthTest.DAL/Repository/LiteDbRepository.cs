@@ -5,6 +5,7 @@ namespace BlazorAppAuthTest.DAL
 {
     public class LiteDbRepository : ILiteDbRepository, IDisposable
     {
+        //TODO check - about singleton with storing collection? Does LiteDbDriver work well in that case?
         private readonly LiteDatabase _db;
         public ILiteCollection<IdentityUser> IdentityUsers { get; }
         public ILiteCollection<IdentityRole> IdentityRoles { get; }
@@ -14,8 +15,8 @@ namespace BlazorAppAuthTest.DAL
             var conString = @"D:\workspaces\BlazorAppAuthTest\Db\liteStorage.db";
             _db = new LiteDatabase(conString);
 
-            IdentityUsers = _db.GetCollection<IdentityUser>("IdentityUser");
-            IdentityRoles = _db.GetCollection<IdentityRole>("IdentityRole");
+            IdentityUsers = _db.GetCollection<IdentityUser>(nameof(IdentityUser));
+            IdentityRoles = _db.GetCollection<IdentityRole>(nameof(IdentityRole));
         }
 
         public void Dispose()
