@@ -1,6 +1,7 @@
 using BlazorAppAuthTest.Areas.Identity;
 using BlazorAppAuthTest.CustomAuntAuth;
 using BlazorAppAuthTest.DAL;
+using BlazorAppAuthTest.DAL.Options;
 using BlazorAppAuthTest.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,21 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //AddIdentity
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+//   .AddDefaultTokenProviders();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddUserStore<LiteDbUserStore>();
-//.AddRoleStore<LiteDbRoleStore>();
-//.AddDefaultTokenProviders();
-
-//builder.Services.AddTransient<IUserStore<IdentityUser>, LiteDbUserStore>();
-builder.Services.AddTransient<IRoleStore<IdentityRole>, LiteDbRoleStore>();
+    .AddUserStore<LiteDbUserStore>()
+    .AddRoles<IdentityRole>()
+    .AddRoleStore<LiteDbRoleStore>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-builder.Services.AddSingleton<IUserRepository, LiteDbUserRepository>();
-builder.Services.AddSingleton<ILiteDbRepository, LiteDbRepository>();
+//Options
+builder.Services.Configure<LiteDbSettings>(builder.Configuration.GetSection(LiteDbSettings.SectionName));
+builder.Services.AddCustomUserRoleStores();
 
 var app = builder.Build();
 

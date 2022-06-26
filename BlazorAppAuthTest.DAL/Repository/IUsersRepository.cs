@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace BlazorAppAuthTest.DAL
+namespace BlazorAppAuthTest.DAL.Repository
 {
     public interface IUserRepository
     {
@@ -8,6 +8,6 @@ namespace BlazorAppAuthTest.DAL
         Task<IdentityResult> DeleteAsync(IdentityUser user);
         Task<IdentityUser> FindByIdAsync(string userId);
         Task<IdentityUser> FindByNameAsync(string userName);
-        Task<IdentityUser> FindByEmailAsync(string email);
+        Task<IdentityUser> FindByEmailAsync(string normalizedEmail);
     }
 }

@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using BlazorAppAuthTest.DAL.Models;
+using LiteDB;
 using Microsoft.AspNetCore.Identity;
 
 namespace BlazorAppAuthTest.DAL
@@ -7,5 +8,6 @@ namespace BlazorAppAuthTest.DAL
     {
         ILiteCollection<IdentityUser> IdentityUsers { get; }
         ILiteCollection<IdentityRole> IdentityRoles { get; }
+        ILiteCollection<RolesForUsers> RolesForUsers { get; }
     }
 }
