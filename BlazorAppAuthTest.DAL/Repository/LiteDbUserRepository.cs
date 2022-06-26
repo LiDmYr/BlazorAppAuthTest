@@ -16,7 +16,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityResult> CreateAsync(IdentityUser user)
         {
-            LiteDB.BsonValue? res = _dbRepo.IdentityUsers.Insert(user);
+            LiteDB.BsonValue res = _dbRepo.IdentityUsers.Insert(user);
 
             await _roleRepository.AddUserAsync(user);
 
@@ -27,7 +27,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityResult> DeleteAsync(IdentityUser user)
         {
-            LiteDB.BsonValue? res = _dbRepo.IdentityUsers.Delete(user.Id);
+            LiteDB.BsonValue res = _dbRepo.IdentityUsers.Delete(user.Id);
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
@@ -36,7 +36,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityUser> FindByIdAsync(string userId)
         {
-            IdentityUser? res = _dbRepo.IdentityUsers.Query().Where(u => u.Id == userId).FirstOrDefault();
+            IdentityUser res = _dbRepo.IdentityUsers.Query().Where(u => u.Id == userId).FirstOrDefault();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
@@ -45,7 +45,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityUser> FindByNameAsync(string userName)
         {
-            IdentityUser? res = _dbRepo.IdentityUsers.Query().Where(u => u.UserName == userName).FirstOrDefault();
+            IdentityUser res = _dbRepo.IdentityUsers.Query().Where(u => u.UserName == userName).FirstOrDefault();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
@@ -59,7 +59,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityUser> FindByEmailAsync(string normalizedEmail)
         {
-            IdentityUser? res = _dbRepo.IdentityUsers.Query().Where(u => u.NormalizedEmail == normalizedEmail || u.Email == normalizedEmail).FirstOrDefault();
+            IdentityUser res = _dbRepo.IdentityUsers.Query().Where(u => u.NormalizedEmail == normalizedEmail || u.Email == normalizedEmail).FirstOrDefault();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 

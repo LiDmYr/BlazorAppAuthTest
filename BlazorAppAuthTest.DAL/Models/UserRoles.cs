@@ -6,11 +6,4 @@
         admin = 1,
         superadmin = 2,
     }
-
-    //public static class UserRoles
-    //{
-    //    public static readonly string UserRoleName = "user";
-    //    public static readonly string AdminRoleName = "admin";
-    //    public static readonly string SuperAdminRoleName = "superadmin";
-    //}
 }

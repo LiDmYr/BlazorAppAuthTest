@@ -14,7 +14,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task AddSuperAdmin(IdentityUser user)
         {
-            IdentityRole[]? allRoles = _dbRepo.IdentityRoles.Query().ToArray();
+            IdentityRole[] allRoles = _dbRepo.IdentityRoles.Query().ToArray();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
@@ -31,7 +31,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task AddUserAsync(IdentityUser user)
         {
-            IdentityRole? userRole = await FindByNameAsync(UserRoles.user);
+            IdentityRole userRole = await FindByNameAsync(UserRoles.user);
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
@@ -45,7 +45,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityRole> FindByNameAsync(UserRoles role)
         {
-            IdentityRole? res = _dbRepo.IdentityRoles.Query().Where(u => u.Name == role.ToString()).FirstOrDefault();
+            IdentityRole res = _dbRepo.IdentityRoles.Query().Where(u => u.Name == role.ToString()).FirstOrDefault();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
@@ -54,7 +54,7 @@ namespace BlazorAppAuthTest.DAL.Repository
 
         public async Task<IdentityRole[]> GetRolesAsync(IdentityUser user)
         {
-            RolesForUsers[]? rolesForUser = _dbRepo.RolesForUsers.Query().Where(u => u.IdentityUser.Id == user.Id)
+            RolesForUsers[] rolesForUser = _dbRepo.RolesForUsers.Query().Where(u => u.IdentityUser.Id == user.Id)
                 .Include(u => u.IdentityRole)
                 .ToArray();
 
