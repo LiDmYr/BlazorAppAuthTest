@@ -18,7 +18,13 @@ namespace BlazorAppAuthTest.DAL
 
         public LiteDbRepository(IOptions<LiteDbSettings> options)
         {
-            _db = new LiteDatabase(options.Value.DbFilePath);
+            //TODO validator
+            string path = options.Value?.DbFilePath;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+            _db = new LiteDatabase(path);
 
             IdentityUsers = _db.GetCollection<IdentityUser>(nameof(IdentityUser));
             IdentityRoles = _db.GetCollection<IdentityRole>(nameof(IdentityRole));
