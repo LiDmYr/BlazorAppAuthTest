@@ -8,6 +8,6 @@ namespace BlazorAppAuthTest.DAL.Repository
         Task<IdentityResult> DeleteAsync(IdentityUser user);
         Task<IdentityUser> FindByIdAsync(string userId);
         Task<IdentityUser> FindByNameAsync(string userName);
-        Task<IdentityUser> FindByEmailAsync(string email);
+        Task<IdentityUser> FindByEmailAsync(string normalizedEmail);
     }
 }

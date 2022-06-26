@@ -57,9 +57,9 @@ namespace BlazorAppAuthTest.DAL.Repository
             //TODO Dispose Conntection
         }
 
-        public async Task<IdentityUser> FindByEmailAsync(string email)
+        public async Task<IdentityUser> FindByEmailAsync(string normalizedEmail)
         {
-            IdentityUser? res = _dbRepo.IdentityUsers.Query().Where(u => u.Email == email).FirstOrDefault();
+            IdentityUser? res = _dbRepo.IdentityUsers.Query().Where(u => u.NormalizedEmail == normalizedEmail || u.Email == normalizedEmail).FirstOrDefault();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
