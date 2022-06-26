@@ -1,6 +1,7 @@
 using BlazorAppAuthTest.Areas.Identity;
 using BlazorAppAuthTest.CustomAuntAuth;
 using BlazorAppAuthTest.DAL;
+using BlazorAppAuthTest.DAL.Options;
 using BlazorAppAuthTest.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
 
+//Options
+builder.Services.Configure<LiteDbSettings>(builder.Configuration.GetSection(LiteDbSettings.SectionName));
 builder.Services.AddCustomUserRoleStores();
 
 var app = builder.Build();

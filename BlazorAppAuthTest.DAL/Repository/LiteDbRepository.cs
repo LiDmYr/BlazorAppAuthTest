@@ -1,6 +1,8 @@
 ﻿using BlazorAppAuthTest.DAL.Models;
+using BlazorAppAuthTest.DAL.Options;
 using LiteDB;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace BlazorAppAuthTest.DAL
 {
@@ -14,11 +16,9 @@ namespace BlazorAppAuthTest.DAL
         public ILiteCollection<IdentityRole> IdentityRoles { get; }
         public ILiteCollection<RolesForUsers> RolesForUsers { get; }
 
-        public LiteDbRepository()
+        public LiteDbRepository(IOptions<LiteDbSettings> options)
         {
-            //TODO read file path from config as IOption<....>
-            var conString = @"D:\workspaces\BlazorAppAuthTest\Db\liteStorage.db";
-            _db = new LiteDatabase(conString);
+            _db = new LiteDatabase(options.Value.DbFilePath);
 
             IdentityUsers = _db.GetCollection<IdentityUser>(nameof(IdentityUser));
             IdentityRoles = _db.GetCollection<IdentityRole>(nameof(IdentityRole));
