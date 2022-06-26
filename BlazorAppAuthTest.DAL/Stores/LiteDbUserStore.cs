@@ -134,7 +134,6 @@ namespace BlazorAppAuthTest.CustomAuntAuth
     /// IUserRoleStore<IdentityUser>
     /// </summary>
     public partial class LiteDbUserStore : IUserRoleStore<IdentityUser> // needed to match roles and users
-
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;

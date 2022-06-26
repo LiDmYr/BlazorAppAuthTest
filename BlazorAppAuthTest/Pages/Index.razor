@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using BlazorAppAuthTest.DAL.Repository
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using System.Security.Principal
 
 <PageTitle>Index</PageTitle>
 
@@ -36,9 +40,20 @@ Welcome to your new app.
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
 
+    [Inject]
+    protected IUserRepository UserRepository { get; set; }
+
     private async Task DoSomething()
     {
-        var user = (await authenticationStateTask).User;
+        ClaimsPrincipal user = (await authenticationStateTask).User;
+        IIdentity userIdentity = user.Identity;
+
+        IdentityUser[] all = await UserRepository.GetAllAsync();
+        IdentityUser userNoMe = all.First(u => u.Email != userIdentity.Name);
+
+
+        await UserRepository.EditAsync(userNoMe, "newName");
+
 
         if (user.Identity.IsAuthenticated)
         {

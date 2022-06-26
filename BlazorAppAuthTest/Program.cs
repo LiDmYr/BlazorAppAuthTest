@@ -6,15 +6,12 @@ using BlazorAppAuthTest.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //AddIdentity
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-//   .AddDefaultTokenProviders();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddUserStore<LiteDbUserStore>()
     .AddRoles<IdentityRole>()

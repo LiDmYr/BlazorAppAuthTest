@@ -32,9 +32,10 @@ namespace BlazorAppAuthTest.DAL
 
             EnsureRolesInDb();
 
-            //TODO
             RolesForUsers.EnsureIndex(x => x.IdentityRole);
             RolesForUsers.EnsureIndex(x => x.IdentityUser);
+
+            //TODO: Add indexes on fields for searching
         }
 
         private void EnsureRolesInDb()
@@ -47,7 +48,7 @@ namespace BlazorAppAuthTest.DAL
         private void EnsureRoleInDb(UserRoles role)
         {
             string roleName = role.ToString();
-            IdentityRole? identityRole = IdentityRoles.Query().Where(ir => ir.Name == roleName).FirstOrDefault();
+            IdentityRole identityRole = IdentityRoles.Query().Where(ir => ir.Name == roleName).FirstOrDefault();
             if (identityRole == null)
             {
                 identityRole = new IdentityRole(roleName)

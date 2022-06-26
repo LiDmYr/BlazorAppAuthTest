@@ -11,7 +11,7 @@ namespace BlazorAppAuthTest.DAL.Repository
         public LiteDbUserRepository(ILiteDbRepository dbRepo, IRoleRepository roleRepository)
         {
             _dbRepo = dbRepo;
-            this._roleRepository = roleRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<IdentityResult> CreateAsync(IdentityUser user)
@@ -60,6 +60,25 @@ namespace BlazorAppAuthTest.DAL.Repository
         public async Task<IdentityUser> FindByEmailAsync(string normalizedEmail)
         {
             IdentityUser res = _dbRepo.IdentityUsers.Query().Where(u => u.NormalizedEmail == normalizedEmail || u.Email == normalizedEmail).FirstOrDefault();
+
+            //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
+
+            return res;
+        }
+
+        public async Task<IdentityResult> EditAsync(IdentityUser user, string newName)
+        {
+            user.UserName = newName;
+            _dbRepo.IdentityUsers.Update(user);
+
+            //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
+
+            return IdentityResult.Success;
+        }
+
+        public async Task<IdentityUser[]> GetAllAsync()
+        {
+            IdentityUser[] res = _dbRepo.IdentityUsers.Query().ToArray();
 
             //TODO check if everything fine, otherwise return IdentityResult.Failed(new IdentityError { Description = $"Could not insert user {user.Email}." });
 
